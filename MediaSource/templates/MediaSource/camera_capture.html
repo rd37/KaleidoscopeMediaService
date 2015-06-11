@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://html5-demos.appspot.com/static/getusermedia/whammy.min.js"></script>
+<script type="text/javascript">
+(function(exports) {
+
+exports.URL = exports.URL || exports.webkitURL;
+
+exports.requestAnimationFrame = exports.requestAnimationFrame ||
+    exports.webkitRequestAnimationFrame || exports.mozRequestAnimationFrame ||
+    exports.msRequestAnimationFrame || exports.oRequestAnimationFrame;
+
+exports.cancelAnimationFrame = exports.cancelAnimationFrame ||
+    exports.webkitCancelAnimationFrame || exports.mozCancelAnimationFrame ||
+    exports.msCancelAnimationFrame || exports.oCancelAnimationFrame;
+
+navigator.getUserMedia = navigator.getUserMedia ||
+    navigator.webkitGetUserMedia || navigator.mozGetUserMedia ||
+    navigator.msGetUserMedia;
+
+
+})(window);
+var glob_id;
+var video;
+var canvas;
+var stream_record;
+var video_stream;
+var rafId;
+var frames=[];
+
+function startRecording(){
+    console.log("Ok connect and start recording I");
+    //stream_record = video_stream.startRecording();
+    frames=[];
+    canvas=document.getElementById("my_canvas");
+    var ctx = canvas.getContext('2d');
+    //ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    //setTimeout(captureImage(),3000);
+    function drawVideoFrame(time){
+    	rafId = requestAnimationFrame(drawVideoFrame);
+    	ctx.drawImage(video,0,0,canvas.width,canvas.height);
+    	var url = canvas.toDataURL('image/webp', 1);
+    	frames.push(url);
+    }
+    rafId = requestAnimationFrame(drawVideoFrame);
+    console.log("Ok drew Image");
+}
+
+function stopRecording(){
+    console.log("OK, stop Recording and send data to server");
+	//stream_record.getRecordedData(handleData);
+	cancelAnimationFrame(rafId);
+	var webmBlob = Whammy.fromImageArray(frames, 1000 / 60);
+	console.log("webmBlob size "+webmBlob);
+	var data1 = {};
+    //data1['video']=webmBlob;
+    data1.metadata = 'Kaleidoscope snippet';
+    data1.action = 'push data'
+    //jQuery.post("video_snippet",data, upload_complete);
+    var fd = new FormData();
+	fd.append('metadata', 'Kaleidoscope webm snippet');
+	fd.append('data_blob', webmBlob);
+	fd.append('action','add user webm blob');
+	//console.log("sending data "+data1);
+	//$.ajax({
+	//    type: 'POST',
+	//    url: 'video_snippet',
+	//    data: fd,
+	//    cache: false,
+	//    processData: false,
+	//    contentType: false
+	//}).done(function(fd) {
+	//       console.log(fd);
+	//});
+	xmlhttp = gethttpobj()
+	xmlhttp.open("POST","video_snippet",true);
+	//xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	//xmlhttp.setRequestHeader("Content-type","multipart/form-data");
+	//xmlhttp.send("metadata=kaelid sope nisp&action=push data&video="+webmBlob);
+	xmlhttp.onload = function(){console.log("status::"+xmlhttp.status)}
+	xmlhttp.send(fd);
+}
+
+function gethttpobj(){
+    
+	if (window.XMLHttpRequest)
+	  {// code for IE7+, Firefox, Chrome, Opera, Safari
+	  xmlhttp=new XMLHttpRequest();
+	  }
+	else
+	  {// code for IE6, IE5
+	  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+	  }
+	return xmlhttp;
+}
+
+
+function upload_complete(){
+	console.log("Video Upload Complete")
+}
+
+function connect(stream) {
+    //video_stream = stream;
+    video = document.getElementById(glob_id);
+    video.autoplay=true;
+    video.src = window.URL ? window.URL.createObjectURL(stream) : stream;
+
+    //video.play();
+    console.log("OK Stream Captured")
+}
+
+function error(e) { console.log(e); }
+
+
+function enter(id) {
+    glob_id=id
+    //alert (""+glob_id)
+    if (navigator.mozGetUserMedia) { 
+       navigator.myGetMedia=navigator.mozGetUserMedia;
+       navigator.myGetMedia({video: true}, connect, error); 
+    } 
+    else {
+       if (navigator.webkitGetUserMedia){
+       		navigator.myGetMedia=navigator.webkitGetUserMedia;
+       		navigator.myGetMedia({video: true}, connect, error); 
+       }
+    }
+}
+
+
+</script>
+
+</head>    
+<body>
+    <input type="button" value="RECORD" onClick="enter('my_video')"></input>
+    <video id="my_video" width="640" height="480"></video>
+    <input type="button" value="Stream RECORD" onClick="startRecording()"></input>
+    <input type="button" value="Stream Stop RECORD" onClick="stopRecording()"></input>
+    <video id="my_video1" width="640" height="480"></video>
+    <canvas id="my_canvas" width="320" height="240"></canvas>
+</body>
+</html>

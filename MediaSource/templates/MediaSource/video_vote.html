@@ -1,0 +1,71 @@
+<html>
+<title>Video Vote</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+var last_id=-1;
+
+function view_this(id){
+    console.log("view this "+id);
+    last_id=id;
+    //get video snippet and set video player
+    vid_elem = document.getElementById('video_viewer');
+    vid_elem.src='video_stream/'+id+'/'
+    //vid_elem.src='http://techslides.com/demos/sample-videos/small.webm'
+    vid_elem.play()
+}
+
+function vote(val){
+    console.log("Voting "+val);
+    if(last_id != -1 ){
+		jQuery.get("video_submit_vote/"+last_id+"/"+val+"/",vote_cb);
+	}else{
+		console.log("please select video first");
+	}
+}
+
+function vote_cb(response){
+	console.log("got voting callback "+response)
+}
+
+function index_stream(){
+    index = document.getElementById("index").value
+    console.log("Get index "+index);
+    jQuery.get("video_stream_count/"+index+"/",video_id_cb);
+}
+
+function video_id_cb(response){
+	console.log("Got back video id "+response);
+	js_obj=JSON.parse(response)
+	console.log("error is"+js_obj.error)
+	if(js_obj.error == false){
+	   console.log("id to stream is "+js_obj.id);
+	   view_this(js_obj.id)
+	}
+}
+
+
+</script>
+<body>
+<table>
+<tr>
+<td>
+<ul>
+{% for d in data %}
+<li id='{{d.id}}' onclick="view_this({{d.id}})"><table border=1><tr><td>{{d.id}}</td><td>{{d.metadata}}</td><td>{{d.size}}</td><td id='vote'>{{d.vote_count}}</td></tr></table></li>
+{% endfor%}
+</ul>
+</td>
+<td>
+<video id="video_viewer" width="320" height="240"></video>
+</td>
+<td>
+
+<input type="button" value="Vote Up" onClick="vote('1')"></input>
+<input type="button" value="Vote Down" onClick="vote('0')"></input>
+<input type="text" id="index"></input>
+<input type="button" value="Stream by Index" onClick="index_stream()"></input>
+</td>
+</tr>
+</table>
+</body>
+</html>
