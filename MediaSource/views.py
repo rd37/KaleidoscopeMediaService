@@ -30,6 +30,7 @@ def home(request):
     #template = loader.get_template('MediaSource/camera_capture.html')
     return render(request, 'MediaSource/camera_capture.html',{})
 
+@csrf_exempt
 def video_stream_count(request,video_index):
     #print "Stream video by sorted list at index %s"%video_index
     videos = WebMVideo.objects.all().order_by('vote_count').reverse()

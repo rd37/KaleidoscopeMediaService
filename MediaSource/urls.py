@@ -16,6 +16,8 @@ urlpatterns = patterns('',
     url(r'^video_vote', views.video_vote ,name='video vote'),
     url(r'^video_stream/(?P<video_id>[0-9]+)', views.video_stream ,name='video stream'),
     url(r'^video_submit_vote/(?P<video_id>[0-9]+)/(?P<video_submit_vote>\d)', views.video_submit_vote ,name='video stream'),
+    
+    #returns video at index of videos sorted by likes
     url(r'^video_stream_count/(?P<video_index>[0-9]+)', views.video_stream_count ,name='video stream by count'), 
     url(r'^admin/', include(admin.site.urls)),
     
