@@ -14,6 +14,7 @@ urlpatterns = patterns('',
     url(r'^$', views.home, name='home'),
     url(r'^video_snippet', views.video_snippet ,name='video snip'),
     url(r'^video_vote', views.video_vote ,name='video vote'),
+    url(r'^image_get/(?P<video_id>[0-9]+)', views.get_image ,name='get image'),
     url(r'^video_stream/(?P<video_id>[0-9]+)', views.video_stream ,name='video stream'),
     url(r'^video_submit_vote/(?P<video_id>[0-9]+)/(?P<video_submit_vote>\d)', views.video_submit_vote ,name='video stream'),
     

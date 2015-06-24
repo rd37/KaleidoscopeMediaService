@@ -30,14 +30,23 @@ var video_stream;
 var rafId;
 var frames=[];
 
+function show_user_input(id){
+	document.getElementById(id).style.visibility="visible";
+	document.getElementById(id).style.display="block";
+}
+
+function hide_user_input(id){
+	document.getElementById(id).style.visibility="hidden";
+	document.getElementById(id).style.display="none";
+}
+
 function startRecording(){
     console.log("Ok connect and start recording I");
-    //stream_record = video_stream.startRecording();
+    
     frames=[];
     canvas=document.getElementById("my_canvas");
     var ctx = canvas.getContext('2d');
-    //ctx.drawImage(video,0,0,canvas.width,canvas.height);
-    //setTimeout(captureImage(),3000);
+    
     function drawVideoFrame(time){
     	rafId = requestAnimationFrame(drawVideoFrame);
     	ctx.drawImage(video,0,0,canvas.width,canvas.height);
@@ -45,42 +54,59 @@ function startRecording(){
     	frames.push(url);
     }
     rafId = requestAnimationFrame(drawVideoFrame);
-    console.log("Ok drew Image");
+    console.log("Ok Recording");
+    document.getElementById("gobutton").value="Snappin'  It!!";
+    document.getElementById("gobutton").disabled=true;
+    //document.getElementById("a_href").disabled=true;
+    
+    
+    setTimeout(stopRecording,4000);
 }
 
 function stopRecording(){
     console.log("OK, stop Recording and send data to server");
-	//stream_record.getRecordedData(handleData);
 	cancelAnimationFrame(rafId);
-	var webmBlob = Whammy.fromImageArray(frames, 1000 / 60);
+	show_user_input("user_input");
+}
+
+function getImageData(){
+	var c=document.getElementById("my_canvas");
+    //var ctx=c.getContext("2d");
+    var dataURL = c.toDataURL();
+    return dataURL;
+}
+
+function sendRecording(msg){
+	var webmBlob = Whammy.fromImageArray(frames, 1000 / 30);
 	console.log("webmBlob size "+webmBlob);
 	var data1 = {};
-    //data1['video']=webmBlob;
     data1.metadata = 'Kaleidoscope snippet';
     data1.action = 'push data'
-    //jQuery.post("video_snippet",data, upload_complete);
+    
+    var canvas=document.getElementById("my_canvas");
+    
+    //var image = new Image()
+    var img_data = canvas.toDataURL("image/png");
+    //image.src=image_data;
+    var img_data = img_data.replace("data:image/png;base64,","");
+    var img_data = img_data.replace(" ","+");
+    
+    var img_data_blob = new Blob([img_data],{"type":"image/png"});
+    
     var fd = new FormData();
 	fd.append('metadata', 'Kaleidoscope webm snippet');
+	fd.append('message', ''+msg);
 	fd.append('data_blob', webmBlob);
+	fd.append('image_blob', img_data_blob );
 	fd.append('action','add user webm blob');
-	//console.log("sending data "+data1);
-	//$.ajax({
-	//    type: 'POST',
-	//    url: 'video_snippet',
-	//    data: fd,
-	//    cache: false,
-	//    processData: false,
-	//    contentType: false
-	//}).done(function(fd) {
-	//       console.log(fd);
-	//});
+	
 	xmlhttp = gethttpobj()
 	xmlhttp.open("POST","video_snippet",true);
-	//xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	//xmlhttp.setRequestHeader("Content-type","multipart/form-data");
-	//xmlhttp.send("metadata=kaelid sope nisp&action=push data&video="+webmBlob);
+	
 	xmlhttp.onload = function(){console.log("status::"+xmlhttp.status)}
 	xmlhttp.send(fd);
+	document.getElementById("gobutton").value="Snap Stream";
+	document.getElementById("gobutton").disabled=false;
 }
 
 function gethttpobj(){
@@ -98,7 +124,7 @@ function gethttpobj(){
 
 
 function upload_complete(){
-	console.log("Video Upload Complete")
+	console.log("Video Upload Complete");
 }
 
 function connect(stream) {
@@ -129,16 +155,92 @@ function enter(id) {
     }
 }
 
-
+function handle_message_input(){
+	
+	var text = document.getElementById("my_message").value;
+	console.log("handle message input "+text);
+	hide_user_input("user_input");
+	sendRecording(text);
+}
 </script>
 
+<style>
+#main_ui {
+    border-radius: 25px;
+    border: 4px solid #8AC007;
+    padding: 20px; 
+    width: 360px;
+}
+#main_child {
+    border-radius: 20px;
+    border: 1px solid #8AC007;
+    padding: 20px; 
+    width: 135px;
+    display:inline-block;
+}
+#main_video {
+    border-radius: 20px;
+    border: 1px solid #8AC0AA;
+    padding: 20px; 
+    width: 320px;
+    display:inline-block;
+}
+#a_href {
+	text-align:center;
+	margin:auto;
+	display:block;
+	text-decoration: none;
+	font-size: 30px;
+}
+#user_input {
+	background-color:#FFFFFF;
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px; 
+    width: 200px;
+    display:none;
+    visibility:hidden;
+    z-index:10;
+}
+#gobutton{
+cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
+padding:5px 25px; /*add some padding to the inside of the button*/
+background:#35b128; /*the colour of the button*/
+border:1px solid #33842a; /*required or the default border for the browser will appear*/
+/*give the button curved corners, alter the size as required*/
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px;
+/*give the button a drop shadow*/
+-webkit-box-shadow: 0 0 4px rgba(0,0,0, .75);
+-moz-box-shadow: 0 0 4px rgba(0,0,0, .75);
+box-shadow: 0 0 4px rgba(0,0,0, .75);
+/*style the text*/
+color:#f3f3f3;
+font-size:1.1em;
+}
+</style>
+
 </head>    
-<body>
-    <input type="button" value="RECORD" onClick="enter('my_video')"></input>
-    <video id="my_video" width="640" height="480"></video>
-    <input type="button" value="Stream RECORD" onClick="startRecording()"></input>
-    <input type="button" value="Stream Stop RECORD" onClick="stopRecording()"></input>
-    <video id="my_video1" width="640" height="480"></video>
-    <canvas id="my_canvas" width="320" height="240"></canvas>
+<body onload="enter('my_video')">
+    
+    <div id="main_ui">
+	<div style="align:center;display:inline-block;"><input id="gobutton" type="button" value="Snap Stream" onClick="startRecording()"></input></div>
+	<div id="main_child"><a id="a_href" href="/mediasource/video_vote.html">Snap Vote</a></div>
+    
+    <div id= "main_video">
+    
+    <div style="position:absolute" id="user_input" >
+    <div style="align:inline-block">Video Description</div>
+    <div style="align:inline-block"><input type="text" id="my_message" onchange="handle_message_input()"></input></div>
+    </div>
+    
+    <video id="my_video" width="320" height="240"></video>
+    </div>
+    
+    </div>
+   
+    <canvas style="display:none;visibility:hidden" id="my_canvas" width="320" height="240"></canvas> 
+    
 </body>
 </html>

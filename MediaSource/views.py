@@ -6,6 +6,27 @@ from django.views.decorators.csrf import csrf_exempt
 from models import VideoSnippetForm,WebMVideo
 import json
 
+
+def _stream_image(vid):
+    data_count=0;
+    while True:
+        try:
+            #data= q.get(block=True,timeout=10)
+            vid_file =open('image_%s'%vid.id)
+            
+            data = vid_file.read()
+            #print "got data %s"%data_count
+            data_count+=1
+            if data_count > 1:
+                break
+            #print "Got data len is %s"%(len(data))
+            #yield data
+            yield data.decode('base64')
+        except Exception as e:
+            print "Exception Occurred  "
+            break
+    print "End image queue data"
+    
 def _stream_data(vid):
     data_count=0;
     while True:
@@ -20,6 +41,7 @@ def _stream_data(vid):
                 break
             #print "Got data %s len is %s"%(data,len(data))
             yield data
+            #yield data.decode('base64')
         except Exception as e:
             print "Exception Occurred  "
             break
@@ -49,6 +71,28 @@ def video_stream_count(request,video_index):
             
     return HttpResponse(json.dumps({"error":True,"message":"no videos avail"}))
 
+def get_image(request,video_id):
+    print "Get Image ID"
+    video = WebMVideo.objects.filter(pk=video_id)
+    print "Got Image %s"%video
+    if len(video) > 0:
+        response = StreamingHttpResponse(_stream_image(video[0]),content_type='image/png')
+        return response
+        #print "Video Id is %s"%video[0].id
+        #print "video Length is %s"%video[0].size
+        #print "return image file image_%s"%video_id
+        #try:
+        #    with open("image_%s"%video_id, "rb") as f:
+        #        print "Opened file , now write out image_%s"%video_id
+        #        return HttpResponse(f.read(), content_type="image/png")
+        #except IOError:
+            #red = Image.new('RGBA', (1, 1), (255,0,0,0))
+            #response = HttpResponse(mimetype="image/jpeg")
+            #red.save(response, "JPEG")
+            #return response
+        #    print "Error Getting Image"
+        #    return HttpResponse("Error");
+    
 def video_stream(request,video_id):
     print "Stream Video %s"%video_id
     video = WebMVideo.objects.filter(pk=video_id)
@@ -98,25 +142,22 @@ def video_snippet(request):
         #data = Document(docfile=request.FILES['docfile'])
         if form.is_valid():
             print "Form is Valid %s"%request.POST['metadata']
+            print "Form message is %s"%request.POST['message']
             print "Files are %s"%request.FILES
             print "File is at data_blob %s"%request.FILES['data_blob']
             print "File size is %s"%len(request.FILES['data_blob'])
+            print "File image size is %s"%len(request.FILES['image_blob'])
             newdoc = WebMVideo()
             
-            newdoc.set_data(request.FILES['data_blob'],request.POST['metadata'],request.POST['action'])
+            newdoc.set_data(request.FILES['data_blob'],request.FILES['image_blob'],request.POST['metadata'],request.POST['action'],request.POST['message'])
             newdoc.save()
             print "Create File Name with %s"%newdoc.id
             _handle_uploaded_file(request.FILES['data_blob'],'video_%s'%newdoc.id)
-            #form.save()
-        #    print "form data is %s"%form.data_blob
+            _handle_uploaded_file(request.FILES['image_blob'],'image_%s'%newdoc.id)
+            
         else:
             print "Form is not Valid"
     else:
         print "method is get ... no good"
-    #print "Recieved Post Request %s"%request
-    #data_blob = request.POST.get('data')
-    #print "Raw Data size is %s"%data_blob
-    #json_obj=json.loads(request.body)
-    #print "Json Data is %s"%json_obj
-    #print "Received Video snippet reqeust %s length %s"%(request,len(request))
+   
     return HttpResponse("Thanks for you video")
