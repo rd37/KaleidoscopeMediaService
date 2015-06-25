@@ -66,7 +66,7 @@ def video_stream_count(request,video_index):
             return HttpResponse(json.dumps({"error":False,"id":"%s"%video.id}))
         else:
             #print "index should exist"
-            video=videos[int(video_index)];
+            video=videos[int(video_index)-1];
             return HttpResponse(json.dumps({"error":False,"id":"%s"%video.id}))
             
     return HttpResponse(json.dumps({"error":True,"message":"no videos avail"}))

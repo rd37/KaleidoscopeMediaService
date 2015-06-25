@@ -165,6 +165,18 @@ function handle_message_input(){
 </script>
 
 <style>
+#title_ui {
+    border-radius: 25px;
+    border: 4px solid #8AC007;
+    padding: 5px; 
+    width: 390px;
+}
+#title_style {
+	font-family: "Arial";
+	font-size: 35px;
+	text-align: center;
+	color:#8A00AF
+}
 #main_ui {
     border-radius: 25px;
     border: 4px solid #8AC007;
@@ -223,7 +235,7 @@ font-size:1.1em;
 
 </head>    
 <body onload="enter('my_video')">
-    
+    <div id="title_ui"><p id="title_style">KaleidoScope SnapIt!</p></div>
     <div id="main_ui">
 	<div style="align:center;display:inline-block;"><input id="gobutton" type="button" value="Snap Stream" onClick="startRecording()"></input></div>
 	<div id="main_child"><a id="a_href" href="/mediasource/video_vote.html">Snap Vote</a></div>
