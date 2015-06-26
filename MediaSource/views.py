@@ -131,6 +131,8 @@ def video_stream(request,video_id):
     #response = StreamingHttpResponse(v.stream_video(q,stream_id),content_type='video/webm;codecs="vp8,vorbis"')
         response = StreamingHttpResponse(_stream_data(video[0]),content_type='video/webm;codecs="vp8,vorbis"')
         response['Content-Length']=video[0].size
+        #Accept-Ranges: bytes
+        response['Accept-Ranges']=bytes
         return response
     else:
         return HttpResponse("Error Stream %s"%video_id)
