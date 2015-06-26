@@ -55,12 +55,17 @@ def home(request):
 
 @csrf_exempt
 def get_random_videos(request,amount):
+    print "show amount %s"%amount
     #print "Stream video by sorted list at index %s"%video_index
     videos = WebMVideo.objects.all()
     vid_ids=[]
     
-    for i in range(amount):
-        random_idx = randint(0,len(videos))
+    if len(videos) > int(amount):
+        amount = len(videos)
+    print "Now show %s"%amount
+    for i in range(int(amount)-1):
+        random_idx = randint(0,len(videos)-1)
+        print "video len %s abd random idx %s"%(len(videos),random_idx)
         ids=videos[random_idx].id
         vid_ids.append(ids)
         
