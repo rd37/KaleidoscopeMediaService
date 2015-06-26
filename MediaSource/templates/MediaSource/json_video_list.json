@@ -1,7 +1,3 @@
 {
-"data":[
-{% for d in data %}
-{{d}},
-{% endfor %}
-]
+"data":[ {% for d in data %} {{d}}, {% endfor %} ]
 }
