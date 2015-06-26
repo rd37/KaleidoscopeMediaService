@@ -60,7 +60,7 @@ def get_random_videos(request,amount):
     videos = WebMVideo.objects.all()
     vid_ids=[]
     
-    if len(videos) > int(amount):
+    if len(videos) < int(amount):
         amount = len(videos)
     print "Now show %s"%amount
     for i in range(int(amount)-1):
