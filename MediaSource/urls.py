@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     
     #returns video at index of videos sorted by likes
     url(r'^video_stream_count/(?P<video_index>[0-9]+)', views.video_stream_count ,name='video stream by count'), 
-    url(r'^get_random_video_ids/(?P<amount>[0-9]+)', views.get_random_ids ,name='video stream by count'), 
+    url(r'^get_random_video_ids/(?P<amount>[0-9]+)', views.get_random_videos ,name='video stream by count'),  
     url(r'^admin/', include(admin.site.urls)),
     
 )
