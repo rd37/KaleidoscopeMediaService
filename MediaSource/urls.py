@@ -12,6 +12,7 @@ from MediaSource import views
 urlpatterns = patterns('',
     # Examples: (?P<video_id>[0-9]+)
     url(r'^$', views.home, name='home'),
+    url(r'^mobile', views.home_mobile, name='home mobile'),
     url(r'^video_snippet', views.video_snippet ,name='video snip'),
     url(r'^video_vote', views.video_vote ,name='video vote'),
     url(r'^image_get/(?P<video_id>[0-9]+)', views.get_image ,name='get image'),

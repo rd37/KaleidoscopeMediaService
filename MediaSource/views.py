@@ -47,7 +47,12 @@ def _stream_data(vid):
             print "Exception Occurred  "
             break
     print "End queue data"
-        
+
+def home_mobile(request):
+    print "Hey htert"
+    #template = loader.get_template('MediaSource/camera_capture.html')
+    return render(request, 'MediaSource/camera_capture_mobile.html',{})
+
 def home(request):
     print "Hey htert"
     #template = loader.get_template('MediaSource/camera_capture.html')
