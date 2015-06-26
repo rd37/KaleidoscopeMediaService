@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse,StreamingHttpResponse
 from django.template import loader,RequestContext
 from django.views.decorators.csrf import csrf_exempt
+from random import randint
 # Create your views here.
 from models import VideoSnippetForm,WebMVideo
 import json
@@ -51,6 +52,23 @@ def home(request):
     print "Hey htert"
     #template = loader.get_template('MediaSource/camera_capture.html')
     return render(request, 'MediaSource/camera_capture.html',{})
+
+@csrf_exempt
+def get_random_videos(request,amount):
+    #print "Stream video by sorted list at index %s"%video_index
+    videos = WebMVideo.objects.all()
+    vid_ids=[]
+    
+    for i in range(amount):
+        random_idx = randint(0,len(videos))
+        ids=videos[random_idx].id
+        vid_ids.append(ids)
+        
+    
+    return render(request,'MediaSource/json_video_list.json',{'data':vid_ids})
+    
+    
+
 
 @csrf_exempt
 def video_stream_count(request,video_index):
