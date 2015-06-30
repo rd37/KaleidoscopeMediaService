@@ -9,7 +9,7 @@
 {% endfor %} 1 ],
 "messages":[ 
 {% for m in messages %} 
-{{m}}, 
+"{{m}}", 
 {% endfor %} "" ]
 
 }
