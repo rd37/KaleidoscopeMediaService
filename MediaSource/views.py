@@ -77,8 +77,21 @@ def get_random_videos(request,amount):
     
     return render(request,'MediaSource/json_video_list.json',{'data':vid_ids})
     
-    
+@csrf_exempt
+def get_vote_count(request,video_index):
+    video = WebMVideo.objects.filter(pk=video_index)
+    if len(video) > 0:
+        cnt = video[0].vote_count
+        return HttpResponse(json.dumps({"error":False,"vote_count":"%s"%cnt}))
+    return HttpResponse(json.dumps({"error":True}))
 
+@csrf_exempt
+def get_video_message(request,video_index):
+    video = WebMVideo.objects.filter(pk=video_index)
+    if len(video) > 0:
+        msg = video[0].message
+        return HttpResponse(json.dumps({"error":False,"message":"%s"%msg}))
+    return HttpResponse(json.dumps({"error":True}))
 
 @csrf_exempt
 def video_stream_count(request,video_index):
