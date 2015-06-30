@@ -7,7 +7,7 @@ from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
 admin.autodiscover()
-from MediaSource import views
+from MediaSource import views 
 
 urlpatterns = patterns('',
     # Examples: (?P<video_id>[0-9]+)

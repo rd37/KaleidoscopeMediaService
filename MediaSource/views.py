@@ -64,6 +64,8 @@ def get_random_videos(request,amount):
     #print "Stream video by sorted list at index %s"%video_index
     videos = WebMVideo.objects.all()
     vid_ids=[]
+    vid_cnts=[]
+    vid_msgs=[]
     
     if len(videos) < int(amount):
         amount = len(videos)
@@ -73,9 +75,11 @@ def get_random_videos(request,amount):
         print "video len %s abd random idx %s"%(len(videos),random_idx)
         ids=videos[random_idx].id
         vid_ids.append(ids)
+        vid_cnts.append(videos[random_idx].vote_count)
+        vid_msgs.append(videos[random_idx].message)
         
     
-    return render(request,'MediaSource/json_video_list.json',{'data':vid_ids})
+    return render(request,'MediaSource/json_video_list.json',{'data':vid_ids,'counts':vid_cnts,'messages':vid_msgs})
     
 @csrf_exempt
 def get_vote_count(request,video_index):

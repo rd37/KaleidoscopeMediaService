@@ -2,5 +2,14 @@
 "data":[ 
 {% for d in data %} 
 {{d}}, 
-{% endfor %} 1 ]
+{% endfor %} 1 ],
+"counts":[ 
+{% for c in counts %} 
+{{c}}, 
+{% endfor %} 1 ],
+"messages":[ 
+{% for m in messages %} 
+{{m}}, 
+{% endfor %} "" ]
+
 }
