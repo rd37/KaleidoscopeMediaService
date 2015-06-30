@@ -190,6 +190,13 @@ function handle_message_input(){
     width: 135px;
     display:inline-block;
 }
+#main_link {
+    border-radius: 18px;
+    border: 1px solid #8AC007;
+    padding: 0px; 
+    width: 200px;
+    display:inline-block;
+}
 #main_video {
     border-radius: 20px;
     border: 1px solid #8AC0AA;
@@ -235,10 +242,10 @@ font-size:1.1em;
 
 </head>    
 <body onload="enter('my_video')">
-    <div id="title_ui"><p id="title_style">KaleidoScope SnapIt!</p></div>
+    <div id="title_ui"><p id="title_style">Kaleidoscope SnapIt!</p></div>
     <div id="main_ui">
-	<div style="align:center;display:inline-block;"><input id="gobutton" type="button" value="Snap Stream" onClick="startRecording()"></input></div>
-	<div id="main_child"><a id="a_href" href="/mediasource/video_vote.html">Snap Vote</a></div>
+	<div style="align:center;display:inline-block;"><input id="gobutton" type="button" value="Snap Video" onClick="startRecording()"></input></div>
+	<div id="main_link"><a id="a_href" href="/mediasource/video_vote.html">Video Billboard</a></div>
     
     <div id= "main_video">
     
