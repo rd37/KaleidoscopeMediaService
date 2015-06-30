@@ -108,11 +108,11 @@ def video_stream_count(request,video_index):
             #print "index too high"
             video=videos[len(videos)-1]
             
-            return HttpResponse(json.dumps({"error":False,"id":"%s"%video.id}))
+            return HttpResponse(json.dumps({"error":False,"id":"%s"%video.id,"count":"%s"%video.vote_count,"message":"%s"%video.message}))
         else:
             #print "index should exist"
             video=videos[int(video_index)-1];
-            return HttpResponse(json.dumps({"error":False,"id":"%s"%video.id}))
+            return HttpResponse(json.dumps({"error":False,"id":"%s"%video.id,"count":"%s"%video.vote_count,"message":"%s"%video.message}))
             
     return HttpResponse(json.dumps({"error":True,"message":"no videos avail"}))
 
