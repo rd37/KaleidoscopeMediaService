@@ -1,0 +1,164 @@
+<html>
+<title>Video Vote</title>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+var last_id=-1;
+
+function show_user_input(id){
+	document.getElementById(id).style.visibility="visible";
+	document.getElementById(id).style.display="block";
+}
+
+function hide_user_input(id){
+	document.getElementById(id).style.visibility="hidden";
+	document.getElementById(id).style.display="none";
+}
+
+function view_this(id,msg){
+    console.log("view this "+id+" :: "+msg);
+    document.getElementById("text_message").innerHTML=msg;
+    show_user_input("user_input");
+    last_id=id;
+    //get video snippet and set video player
+    vid_elem = document.getElementById('video_viewer');
+    vid_elem.src='video_stream/'+id+'/'
+    //vid_elem.src='http://techslides.com/demos/sample-videos/small.webm'
+    vid_elem.play()
+    setTimeout(done_view,4000);
+}
+
+function done_view(){
+	hide_user_input("user_input");
+}
+
+function vote(val){
+    console.log("Voting "+val);
+    if(last_id != -1 ){
+		jQuery.get("video_submit_vote/"+last_id+"/"+val+"/",vote_cb);
+	}else{
+		console.log("please select video first");
+	}
+}
+
+function vote_cb(response){
+	console.log("got voting callback "+response)
+}
+
+function index_stream(){
+    index = document.getElementById("index").value
+    console.log("Get index "+index);
+    jQuery.get("video_stream_count/"+index+"/",video_id_cb);
+}
+
+function video_id_cb(response){
+	console.log("Got back video id "+response);
+	js_obj=JSON.parse(response)
+	console.log("error is"+js_obj.error)
+	if(js_obj.error == false){
+	   console.log("id to stream is "+js_obj.id);
+	   view_this(js_obj.id)
+	}
+}
+</script>
+<style>
+#title_ui {
+    border-radius: 25px;
+    border: 4px solid #8AC007;
+    padding: 5px; 
+    width: 575px;
+}
+#title_style {
+	font-family: "Arial";
+	font-size: 35px;
+	text-align: center;
+	color:#8A00AF
+}
+#main_child {
+    border-radius: 20px;
+    border: 1px solid #8AC007;
+    padding: 10px; 
+    width: 80px;
+    display:inline-block;
+}
+#main_video {
+    border-radius: 20px;
+    border: 1px solid #8AC0AA;
+    padding: 20px; 
+    width: 320px;
+    
+}
+#a_href {
+	text-align:center;
+	margin:auto;
+	display:block;
+	text-decoration: none;
+	font-size: 30px;
+}
+#user_input {
+	background-color:#FFFFFF;
+    border-radius: 25px;
+    opacity:0.5;
+    border: 2px solid #8AC007;
+    padding: 5px; 
+    width: 200px;
+    display:none;
+    visibility:hidden;
+    z-index:10;
+}
+#gobutton{
+cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
+padding:5px 25px; /*add some padding to the inside of the button*/
+background:#35b128; /*the colour of the button*/
+border:1px solid #33842a; /*required or the default border for the browser will appear*/
+/*give the button curved corners, alter the size as required*/
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px;
+/*give the button a drop shadow*/
+-webkit-box-shadow: 0 0 4px rgba(0,0,0, .75);
+-moz-box-shadow: 0 0 4px rgba(0,0,0, .75);
+box-shadow: 0 0 4px rgba(0,0,0, .75);
+/*style the text*/
+color:#f3f3f3;
+font-size:1.1em;
+}
+</style>
+</head>
+<body>
+<div id="title_ui"><p id="title_style">Kaleidoscope Video Billboard</p></div>
+<br>
+<table cellpadding="0">
+<tr>
+<td>
+<ul style="list-style-type:none;height:330px; overflow:auto;">
+{% for d in data %}
+<li><div id="main_child"><img src="/mediasource/image_get/{{d.id}}" width="80" height="60" onclick="view_this({{d.id}},'{{d.vote_count}}:{{d.message}}')"></img></div></li>
+{% endfor %}
+</ul>
+</td>
+<td>
+<div>
+  <div id="main_child"><a id="a_href" href="/mediasource">Snap</a></div>
+  <div style="display:inline-block;"><input id="gobutton" type="button" value="Vote Up" onClick="vote('1')"></input></div>
+  <div style="display:inline-block;"><input id="gobutton" type="button" value="Vote Down" onClick="vote('0')"></input></div>
+
+  <div id="main_video">
+    <div style="position:absolute" id="user_input" >
+        <div style="align:inline-block"><p id="text_message">MMM</p> </div>
+    </div>
+    <video id="video_viewer" width="320" height="240"></video>
+  </div>
+</div>
+</td>
+
+
+
+<!-- <input type="text" id="index"></input>
+<input type="button" value="Stream by Index" onClick="index_stream()"></input>
+-->
+
+</tr>
+</table>
+</body>
+</html>

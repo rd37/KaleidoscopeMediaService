@@ -2,6 +2,9 @@
 <title>Video Vote</title>
 <head>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}style.css"/> 
+<link href="{{ STATIC_URL }}js/kickstart.js"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/kickstart.css" media="all" /> 
 <script type="text/javascript">
 var last_id=-1;
 
@@ -107,48 +110,40 @@ function video_id_cb(response){
     z-index:10;
 }
 #gobutton{
-cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
-padding:5px 25px; /*add some padding to the inside of the button*/
-background:#35b128; /*the colour of the button*/
-border:1px solid #33842a; /*required or the default border for the browser will appear*/
-/*give the button curved corners, alter the size as required*/
--moz-border-radius: 10px;
--webkit-border-radius: 10px;
-border-radius: 10px;
-/*give the button a drop shadow*/
--webkit-box-shadow: 0 0 4px rgba(0,0,0, .75);
--moz-box-shadow: 0 0 4px rgba(0,0,0, .75);
-box-shadow: 0 0 4px rgba(0,0,0, .75);
-/*style the text*/
-color:#f3f3f3;
-font-size:1.1em;
+
 }
 </style>
 </head>
 <body>
-<div id="title_ui"><p id="title_style">Kaleidoscope Video Billboard</p></div>
-<br>
-<table cellpadding="0">
-<tr>
-<td>
-<ul style="list-style-type:none;height:330px; overflow:auto;">
-{% for d in data %}
-<li><div id="main_child"><img src="/mediasource/image_get/{{d.id}}" width="80" height="60" onclick="view_this({{d.id}},'{{d.vote_count}}:{{d.message}}')"></img></div></li>
-{% endfor %}
-</ul>
-</td>
-<td>
-<div>
-  <div id="main_child"><a id="a_href" href="/mediasource">Snap</a></div>
-  <div style="display:inline-block;"><input id="gobutton" type="button" value="Vote Up" onClick="vote('1')"></input></div>
-  <div style="display:inline-block;"><input id="gobutton" type="button" value="Vote Down" onClick="vote('0')"></input></div>
+<div class="grid">
+        <div id="page_header" class="col_12 column">
+             <h1>KaleidoScope ViewerTron</h1>
+        </div>
+    <div class="col_12 page_body">
+            <ul class="menu">
+                <li class=""><a href="">Home</a></li>
+                <li class=""><a href="/mediasource">Snap It</a></li>
+                <li class="current"><a href="/mediasource/video_vote">Billboard</a></li>
+            </ul>
+        <div class="col_6 gallery">
+            {% for d in data %}
+            <img src="/mediasource/image_get/{{d.id}}" width="80" height="60" onclick="view_this({{d.id}},'{{d.vote_count}}:{{d.message}}')"></img>
+            {% endfor %}
+        </div>
+        <div class="col_6">
+                    <div id="">
+                <div style="position:absolute" id="user_input" >
+                    <div style="align:inline-block"><p id="text_message">MMM</p> </div>
+                </div>
+                <video id="video_viewer" controls></video>
+              </div>
+            <input id="gobutton" class="meduim green" type="button" value="Vote Up" onClick="vote('1')"></input>
+            <input id="gobutton" class="meduim green" type="button" value="Vote Down" onClick="vote('0')"></input>
+        </div>
+        <div>
 
-  <div id="main_video">
-    <div style="position:absolute" id="user_input" >
-        <div style="align:inline-block"><p id="text_message">MMM</p> </div>
+        </div>
     </div>
-    <video id="video_viewer" width="320" height="240"></video>
-  </div>
 </div>
 </td>
 

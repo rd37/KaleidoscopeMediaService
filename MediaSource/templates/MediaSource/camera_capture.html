@@ -3,6 +3,9 @@
 <head>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://html5-demos.appspot.com/static/getusermedia/whammy.min.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}style.css"/> 
+<link href="{{ STATIC_URL }}js/kickstart.js"/>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/kickstart.css" media="all" /> 
 <script type="text/javascript">
 (function(exports) {
 
@@ -165,12 +168,7 @@ function handle_message_input(){
 </script>
 
 <style>
-#title_ui {
-    border-radius: 25px;
-    border: 4px solid #8AC007;
-    padding: 5px; 
-    width: 390px;
-}
+
 #title_style {
 	font-family: "Arial";
 	font-size: 35px;
@@ -212,54 +210,52 @@ function handle_message_input(){
 	font-size: 30px;
 }
 #user_input {
-	background-color:#FFFFFF;
-    border-radius: 25px;
-    border: 2px solid #8AC007;
-    padding: 20px; 
-    width: 200px;
-    display:none;
     visibility:hidden;
+    background: rgba(255 , 255 , 255, .5);
+    padding: 10px; 
+    width: 250px;
+    display:none;
     z-index:10;
+    margin-top: -200px;
 }
 #gobutton{
-cursor:pointer; /*forces the cursor to change to a hand when the button is hovered*/
-padding:5px 25px; /*add some padding to the inside of the button*/
-background:#35b128; /*the colour of the button*/
-border:1px solid #33842a; /*required or the default border for the browser will appear*/
-/*give the button curved corners, alter the size as required*/
--moz-border-radius: 10px;
--webkit-border-radius: 10px;
-border-radius: 10px;
-/*give the button a drop shadow*/
--webkit-box-shadow: 0 0 4px rgba(0,0,0, .75);
--moz-box-shadow: 0 0 4px rgba(0,0,0, .75);
-box-shadow: 0 0 4px rgba(0,0,0, .75);
-/*style the text*/
-color:#f3f3f3;
-font-size:1.1em;
+
 }
 </style>
 
 </head>    
 <body onload="enter('my_video')">
-    <div id="title_ui"><p id="title_style">Kaleidoscope SnapIt!</p></div>
-    <div id="main_ui">
-	<div style="align:center;display:inline-block;"><input id="gobutton" type="button" value="Snap Video" onClick="startRecording()"></input></div>
-	<div id="main_link"><a id="a_href" href="/mediasource/video_vote.html">Video Billboard</a></div>
-    
-    <div id= "main_video">
-    
-    <div style="position:absolute" id="user_input" >
-    <div style="align:inline-block">Video Description</div>
-    <div style="align:inline-block"><input type="text" id="my_message" onchange="handle_message_input()"></input></div>
+<div class="grid">
+    <div id="page_header" class="col_12 column">
+         <h1>KaleidoScope ViewerTron</h1>
     </div>
-    
-    <video id="my_video" width="320" height="240"></video>
-    </div>
-    
-    </div>
-   
-    <canvas style="display:none;visibility:hidden" id="my_canvas" width="320" height="240"></canvas> 
-    
+    <div class="col_12 page_body">
+    <ul class="menu">
+    <li class=""><a href="142.104.17.137/6">Home</a></li>
+    <li class="current"><a href="/mediasource">Snap It</a></li>
+    <li class=""><a href="/mediasource/video_vote">Billboard</a></li>
+    </ul>
+      <div class="col_4">
+          
+             <p>Take your video.</p>
+            <input id="gobutton" class="meduim green" type="button" onClick="startRecording()" value="Snap Video">
+            <hr class="alt2" />
+            <p>View Videos.</p>
+            <a class="button meduim green" href="video_vote.html">Video Billboard</a>   
+            <hr class="alt2" />
+        </div>
+        <div class="col_8">
+            <video id="my_video" width="100%" ></video>
+            <div style="position:absolute" id="user_input" >
+                <div style="align:inline-block"><p>Video Description</p></div>
+            <div style="align:inline-block">
+                <input type="text" id="my_message" onchange="handle_message_input()"></input>
+            </div>   
+        </div>
+      
+
+        <canvas style="display:none;visibility:hidden" id="my_canvas" width="320" height="240"></canvas> 
+    </div> 
+</div>   
 </body>
 </html>
