@@ -58,8 +58,9 @@ function startRecording(){
     }
     rafId = requestAnimationFrame(drawVideoFrame);
     console.log("Ok Recording");
-    document.getElementById("gobutton").value="Snappin'  It!!";
+    document.getElementById("gobutton").value="Recording";
     document.getElementById("gobutton").disabled=true;
+
     //document.getElementById("a_href").disabled=true;
     
     
@@ -108,7 +109,7 @@ function sendRecording(msg){
 	
 	xmlhttp.onload = function(){console.log("status::"+xmlhttp.status)}
 	xmlhttp.send(fd);
-	document.getElementById("gobutton").value="Snap Stream";
+	document.getElementById("gobutton").value="SnapIt";
 	document.getElementById("gobutton").disabled=false;
 }
 
