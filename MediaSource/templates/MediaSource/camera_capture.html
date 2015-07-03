@@ -81,6 +81,7 @@ function getImageData(){
 }
 
 function sendRecording(msg){
+    document.getElementById("gobutton").value="Sending";
 	var webmBlob = Whammy.fromImageArray(frames, 1000 / 30);
 	console.log("webmBlob size "+webmBlob);
 	var data1 = {};
@@ -107,9 +108,9 @@ function sendRecording(msg){
 	xmlhttp = gethttpobj()
 	xmlhttp.open("POST","video_snippet",true);
 	
-	xmlhttp.onload = function(){console.log("status::"+xmlhttp.status)}
+	xmlhttp.onload = function(){console.log("status::"+xmlhttp.status);document.getElementById("gobutton").value="SnapIt";}
 	xmlhttp.send(fd);
-	document.getElementById("gobutton").value="SnapIt";
+	
 	document.getElementById("gobutton").disabled=false;
 }
 
