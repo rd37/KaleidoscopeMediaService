@@ -59,6 +59,7 @@ function startRecording(){
     rafId = requestAnimationFrame(drawVideoFrame);
     console.log("Ok Recording");
     document.getElementById("gobutton").value="Recording";
+    document.getElementById("gobutton").setAttribute("class","meduim red");
     document.getElementById("gobutton").disabled=true;
 
     //document.getElementById("a_href").disabled=true;
@@ -108,7 +109,7 @@ function sendRecording(msg){
 	xmlhttp = gethttpobj()
 	xmlhttp.open("POST","video_snippet",true);
 	
-	xmlhttp.onload = function(){console.log("status::"+xmlhttp.status);document.getElementById("gobutton").value="SnapIt";}
+	xmlhttp.onload = function(){console.log("status::"+xmlhttp.status);document.getElementById("gobutton").setAttribute("class","meduim green");document.getElementById("gobutton").value="SnapIt";}
 	xmlhttp.send(fd);
 	
 	document.getElementById("gobutton").disabled=false;
