@@ -4,7 +4,8 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <link rel="stylesheet" href="{{ STATIC_URL }}style.css"/> 
 <link href="{{ STATIC_URL }}js/kickstart.js"/>
-<link rel="stylesheet" href="{{ STATIC_URL }}css/kickstart.css" media="all" /> 
+<link rel="stylesheet" href="{{ STATIC_URL }}css/kickstart.css" media="all" />
+<script type="text/javascript" src="{{ STATIC_URL }}html5gallery/html5gallery.js"></script> 
 <script type="text/javascript">
 var last_id=-1;
 
@@ -26,7 +27,7 @@ function view_this(id,msg){
     //get video snippet and set video player
     vid_elem = document.getElementById('video_viewer');
     vid_elem.src='video_stream/'+id+'/'
-    //vid_elem.src='http://techslides.com/demos/sample-videos/small.webm'
+    //vid_elem.href='http://techslides.com/demos/sample-videos/small.webm'
     vid_elem.play()
     setTimeout(done_view,4000);
 }
@@ -99,16 +100,16 @@ function video_id_cb(response){
 	font-size: 30px;
 }
 #user_input {
-	background-color:#FFFFFF;
-    border-radius: 25px;
-    opacity:0.5;
-    border: 2px solid #8AC007;
-    padding: 5px; 
-    width: 200px;
+    background-color:#FFFFFF;
+    opacity:0.9;
+    padding: 0px; 
+    width: 250px;
+    height: 50px;
     display:none;
     visibility:hidden;
     z-index:10;
 }
+
 #gobutton{
 
 }
@@ -125,23 +126,27 @@ function video_id_cb(response){
                 <li class=""><a href="/mediasource">Snap It</a></li>
                 <li class="current"><a href="/mediasource/video_vote">Billboard</a></li>
             </ul>
+        <div class="col_12"><p>Here are some cool videos others posted. Select a video.</p></div>
         <div class="col_6 gallery">
             {% for d in data %}
-            <img src="/mediasource/image_get/{{d.id}}" width="80" height="60" onclick="view_this({{d.id}},'{{d.vote_count}}:{{d.message}}')"></img>
+            <img src="http://142.104.17.149/mediasource/image_get/{{d.id}}" width="80" height="60" onclick="view_this({{d.id}},'{{d.vote_count}}:{{d.message}}')"></img>
             {% endfor %}
         </div>
         <div class="col_6">
                     <div id="">
-                <div style="position:absolute" id="user_input" >
+                <div style="position:absolute" id="user_input">
                     <div style="align:inline-block"><p id="text_message">MMM</p> </div>
                 </div>
-                <video id="video_viewer" controls></video>
+                <video id="video_viewer" width="100%"></video>
               </div>
-            <input id="gobutton" class="meduim green" type="button" value="Vote Up" onClick="vote('1')"></input>
-            <input id="gobutton" class="meduim green" type="button" value="Vote Down" onClick="vote('0')"></input>
+              <hr class="alt2" />
+            <p>How was the video?</p>
+            <input id="gobutton" class="meduim green" type="button" value="Like"  onClick="vote('1')"></input>
+            <input id="gobutton" class="meduim green" type="button" value="Dislike" onClick="vote('0')"></input>
+            
+           
         </div>
-        <div>
-
+      
         </div>
     </div>
 </div>
